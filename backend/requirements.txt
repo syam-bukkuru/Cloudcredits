@@ -1,5 +1,7 @@
-fastapi
-uvicorn
-tensorflow
-python-multipart  # for image upload
-pillow
+fastapi==0.115.12
+uvicorn==0.34.2
+tensorflow==2.19.0
+keras==3.10.0
+pillow==11.2.1
+python-multipart==0.0.20
+requests==2.32.3  # If downloading the model
