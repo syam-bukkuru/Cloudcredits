@@ -17,6 +17,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def root():
+    return {"message": "Cat or Dog Classification API"}
+
 # Health check endpoint for Render
 @app.get("/health")
 async def health_check():
