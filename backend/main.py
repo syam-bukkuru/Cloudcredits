@@ -17,6 +17,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Health check endpoint for Render
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
 # Load the trained model
 model = tf.keras.models.load_model("cat_dog_model.keras")
 
