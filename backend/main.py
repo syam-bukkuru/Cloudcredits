@@ -11,7 +11,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -21,12 +21,17 @@ app.add_middleware(
 async def root():
     return {"message": "Cat or Dog Classification API"}
 
-# Health check endpoint for Render
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
-# Load the trained model
-model = tf.keras.models.load_model("cat_dog_model.keras")
+
+# Load TFLite model
+interpreter = tf.lite.Interpreter(model_path="cat_dog_model.tflite")
+interpreter.allocate_tensors()
+
+# Get input and output tensors
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
 
 # Image preprocessing function
 def read_image(file) -> np.ndarray:
@@ -38,13 +43,13 @@ def read_image(file) -> np.ndarray:
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     contents = await file.read()
-    img_batch = read_image(contents)
-    prediction = model.predict(img_batch)[0][0]
+    img_batch = read_image(contents)  # Shape: (1, 160, 160, 3)
+
+    # Run inference with TFLite
+    interpreter.set_tensor(input_details[0]["index"], img_batch.astype(np.float32))
+    interpreter.invoke()
+    prediction = interpreter.get_tensor(output_details[0]["index"])[0][0]
+
     label = "dog" if prediction > 0.5 else "cat"
     confidence = float(prediction if label == "dog" else 1 - prediction)
     return JSONResponse({"label": label, "confidence": confidence})
-
-# npm run dev
-# cd backend
-# .\myenv\Scripts\activate
-# uvicorn main:app --reload
