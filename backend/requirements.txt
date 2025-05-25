@@ -4,4 +4,5 @@ tensorflow==2.19.0
 keras==3.10.0
 pillow==11.2.1
 python-multipart==0.0.20
-requests==2.32.3  # If downloading the model
+requests==2.32.3  
+gunicorn==23.0.0
