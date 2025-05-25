@@ -1,0 +1,24 @@
+# === Python ===
+__pycache__/
+myenv/
+*.keras
+*.h5
+*.pkl
+.env
+
+# === Node.js / Frontend ===
+node_modules/
+dist/
+dist-ssr/
+*.log
+logs/
+.vscode/
+.idea/
+.DS_Store
+
+# === Build Files ===
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
