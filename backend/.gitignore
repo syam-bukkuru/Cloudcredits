@@ -1,6 +1,4 @@
 __pycache__/
 myenv/
 node_modules/
-*.keras
-!models/*.keras
 .env
